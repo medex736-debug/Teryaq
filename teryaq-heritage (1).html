@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Teryaq | ترياق — Apothecary of the Atlas</title>
+<meta name="description" content="Grandmother's Maghrebi remedies, precision-crafted for a modern ritual. Ethically sourced, hand-blended in Casablanca.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500;600&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   Teryaq — Design Tokens
+   Palette: chalk (tadelakt plaster), bottle (mint-tea green),
+   sienna (Fes pottery), brass (teapot metal), ink (walnut dye)
+   Signature: the rub-el-hizb 8-point star (zellige geometry)
+   used as brand mark, divider, and tile motif; an animated
+   line-drawn teapot as the hero thesis.
+   ============================================================ */
+:root{
+  --chalk:#F4EEDF;
+  --linen:#E8DCC4;
+  --bottle:#1F3B2C;
+  --bottle-light:#345542;
+  --sienna:#A8431F;
+  --sienna-light:#C3572B;
+  --brass:#A6822F;
+  --ink:#231F17;
+  --ink-soft:#6B6152;
+  --line: rgba(35,31,23,0.14);
+  --font-display-en:'Fraunces', serif;
+  --font-display-ar:'Aref Ruqaa', serif;
+  --font-body-en:'IBM Plex Sans', sans-serif;
+  --font-body-ar:'IBM Plex Sans Arabic', sans-serif;
+  --font-mono:'IBM Plex Mono', monospace;
+  --ease: cubic-bezier(.22,1,.36,1);
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  background:var(--chalk);
+  color:var(--ink);
+  font-family:var(--font-body-en);
+  font-weight:300;
+  font-size:16px;
+  line-height:1.65;
+  position:relative;
+  overflow-x:hidden;
+}
+html.lang-ar body{font-family:var(--font-body-ar);}
+
+/* paper grain — generated, no external image dependency */
+body::before{
+  content:"";
+  position:fixed;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity:.05;
+  mix-blend-mode:multiply;
+  pointer-events:none;
+  z-index:1;
+}
+
+img,svg{display:block;max-width:100%;}
+a{color:inherit;}
+ul{list-style:none;}
+button{font:inherit;background:none;border:none;color:inherit;cursor:pointer;}
+input{font:inherit;}
+
+/* language visibility — every bilingual node holds two spans;
+   only the one matching <html lang> is shown */
+[data-lang]{display:none;}
+html:not(.lang-ar) [data-lang="en"]{display:inline;}
+html.lang-ar [data-lang="ar"]{display:inline;}
+/* headline spans render as block so line-breaks inside them behave */
+.h-display > [data-lang]{display:none;}
+html:not(.lang-ar) .h-display > [data-lang="en"]{display:block;}
+html.lang-ar .h-display > [data-lang="ar"]{display:block;}
+
+html.lang-ar{direction:rtl;}
+
+/* Typography */
+.h-display{
+  font-family:var(--font-display-en);
+  font-weight:500;
+  line-height:1.1;
+  letter-spacing:-0.01em;
+  color:var(--ink);
+}
+html.lang-ar .h-display{font-family:var(--font-display-ar);font-weight:700;letter-spacing:0;line-height:1.35;}
+.h-display.on-dark{color:var(--chalk);}
+
+.eyebrow,.label{
+  font-family:var(--font-mono);
+  font-size:12px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--sienna);
+}
+html.lang-ar .eyebrow, html.lang-ar .label{
+  font-family:var(--font-body-ar);
+  letter-spacing:0;
+  text-transform:none;
+  font-weight:600;
+}
+
+.ingredients{
+  font-family:var(--font-mono);
+  font-size:12px;
+  letter-spacing:.03em;
+  color:var(--ink-soft);
+  display:block;
+}
+html.lang-ar .ingredients{font-family:var(--font-body-ar);}
+
+p{color:var(--ink-soft);font-weight:300;}
+html.lang-ar p{font-weight:400;}
+
+.wrap{max-width:1180px;margin-inline:auto;padding-inline:24px;}
+@media(min-width:900px){.wrap{padding-inline:56px;}}
+
+/* Focus */
+a:focus-visible,button:focus-visible,input:focus-visible{
+  outline:2px solid var(--sienna);
+  outline-offset:3px;
+}
+
+/* Reveal system */
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .8s var(--ease), transform .8s var(--ease);}
+.reveal.in-view{opacity:1;transform:translateY(0);}
+
+/* Buttons */
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:15px 30px;
+  font-family:var(--font-mono);font-size:12.5px;font-weight:500;
+  letter-spacing:.1em;text-transform:uppercase;
+  border-radius:3px;border:1px solid transparent;
+  cursor:pointer;text-decoration:none;
+  transition:transform .25s var(--ease), box-shadow .25s var(--ease), background-color .25s var(--ease), color .25s var(--ease), border-color .25s var(--ease);
+}
+html.lang-ar .btn{font-family:var(--font-body-ar);letter-spacing:0;text-transform:none;font-weight:600;}
+.btn-primary{background:var(--sienna);color:var(--chalk);box-shadow:3px 3px 0 var(--brass);}
+.btn-primary:hover{transform:translate(-2px,-2px);box-shadow:5px 5px 0 var(--brass);}
+.btn-primary:active{transform:translate(0,0);box-shadow:1px 1px 0 var(--brass);}
+.btn-ghost{background:transparent;color:var(--ink);border-color:var(--line);}
+.btn-ghost:hover{border-color:var(--ink);}
+.btn-outline{background:transparent;border:1px solid var(--bottle);color:var(--bottle);width:100%;justify-content:center;}
+.btn-outline:hover{background:var(--bottle);color:var(--chalk);}
+.btn-light{background:var(--chalk);color:var(--bottle);box-shadow:3px 3px 0 rgba(244,238,223,.25);}
+.btn-light:hover{transform:translate(-2px,-2px);box-shadow:5px 5px 0 rgba(244,238,223,.25);}
+
+/* ============ NAV ============ */
+.nav{
+  position:sticky;top:0;z-index:50;
+  background:rgba(244,238,223,.86);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+}
+.nav-inner{
+  max-width:1180px;margin-inline:auto;padding:16px 24px;
+  display:flex;align-items:center;justify-content:space-between;gap:20px;
+}
+@media(min-width:900px){.nav-inner{padding:16px 56px;}}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;}
+.brand-mark{width:26px;height:26px;color:var(--sienna);}
+.brand-name{font-family:var(--font-display-en);font-size:22px;color:var(--ink);}
+html.lang-ar .brand-name-ar{font-family:var(--font-display-ar);font-size:20px;color:var(--ink);margin-inline-start:6px;}
+.nav-links{display:none;align-items:center;gap:34px;}
+@media(min-width:900px){.nav-links{display:flex;}}
+.nav-links a{
+  font-family:var(--font-mono);font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;
+  text-decoration:none;color:var(--ink-soft);
+  position:relative;padding-block:4px;
+  transition:color .2s var(--ease);
+}
+html.lang-ar .nav-links a{font-family:var(--font-body-ar);text-transform:none;letter-spacing:0;font-size:15px;}
+.nav-links a::after{
+  content:"";position:absolute;inset-inline:0;bottom:0;height:1px;background:var(--sienna);
+  transform:scaleX(0);transform-origin:right;transition:transform .3s var(--ease);
+}
+html.lang-ar .nav-links a::after{transform-origin:left;}
+.nav-links a:hover{color:var(--ink);}
+.nav-links a:hover::after{transform:scaleX(1);}
+.nav-actions{display:flex;align-items:center;gap:16px;}
+
+.lang-switch{
+  position:relative;display:flex;border:1px solid var(--line);border-radius:999px;padding:3px;
+  font-family:var(--font-mono);font-size:12px;letter-spacing:.05em;
+}
+.lang-switch::before{
+  content:"";position:absolute;top:3px;bottom:3px;width:calc(50% - 3px);
+  background:var(--bottle);border-radius:999px;
+  transition:transform .3s var(--ease);
+  inset-inline-start:3px;
+}
+.lang-switch[data-active="ar"]::before{transform:translateX(100%);}
+html.lang-ar .lang-switch[data-active="ar"]::before{transform:translateX(-100%);}
+.lang-switch button{
+  position:relative;z-index:1;width:34px;height:26px;border-radius:999px;
+  color:var(--ink-soft);transition:color .3s var(--ease);
+}
+.lang-switch button[aria-pressed="true"]{color:var(--chalk);}
+
+.menu-toggle{display:flex;padding:6px;}
+@media(min-width:900px){.menu-toggle{display:none;}}
+
+/* ============ HERO ============ */
+.hero{position:relative;padding-block:64px 40px;overflow:hidden;}
+@media(min-width:900px){.hero{padding-block:88px 60px;}}
+.hero-inner{
+  max-width:1180px;margin-inline:auto;padding-inline:24px;
+  display:flex;flex-direction:column;gap:48px;align-items:center;
+}
+@media(min-width:900px){
+  .hero-inner{padding-inline:56px;flex-direction:row;gap:60px;text-align:initial;}
+}
+.hero-copy{max-width:560px;text-align:center;}
+@media(min-width:900px){.hero-copy{text-align:start;flex:1;}}
+.hero-copy .eyebrow{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:6px 14px;border:1px solid var(--sienna);border-radius:999px;
+  margin-bottom:22px;
+  opacity:0;transform:translateY(10px);
+  transition:opacity .7s var(--ease), transform .7s var(--ease);
+}
+.hero.loaded .hero-copy .eyebrow{opacity:1;transform:translateY(0);transition-delay:.1s;}
+.hero-copy h1{font-size:44px;margin-bottom:20px;}
+@media(min-width:640px){.hero-copy h1{font-size:58px;}}
+.hero-copy h1 > [data-lang]{opacity:0;transform:translateY(16px);transition:opacity .8s var(--ease), transform .8s var(--ease);transition-delay:.25s;}
+.hero.loaded .hero-copy h1 > [data-lang]{opacity:1;transform:translateY(0);}
+.hero-sub{
+  font-size:18px;max-width:440px;margin-inline:auto;margin-bottom:32px;
+  opacity:0;transform:translateY(14px);transition:opacity .8s var(--ease), transform .8s var(--ease);transition-delay:.4s;
+}
+@media(min-width:900px){.hero-sub{margin-inline:0;}}
+.hero.loaded .hero-sub{opacity:1;transform:translateY(0);}
+.hero-actions{
+  display:flex;flex-wrap:wrap;gap:14px;justify-content:center;
+  opacity:0;transform:translateY(14px);transition:opacity .8s var(--ease), transform .8s var(--ease);transition-delay:.55s;
+}
+@media(min-width:900px){.hero-actions{justify-content:flex-start;}}
+.hero.loaded .hero-actions{opacity:1;transform:translateY(0);}
+
+.hero-art{position:relative;width:280px;max-width:100%;flex-shrink:0;}
+@media(min-width:900px){.hero-art{width:380px;}}
+.ornament-spin{
+  position:absolute;top:-10%;inset-inline-end:-8%;width:110px;height:110px;color:var(--linen);
+  animation:spin 60s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg);}}
+.teapot{position:relative;z-index:2;width:100%;height:auto;}
+.draw-path{stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 1.3s var(--ease);}
+.hero.loaded .draw-path{stroke-dashoffset:0;}
+.draw-path.delay-1{transition-delay:.35s;}
+.draw-path.delay-2{transition-delay:.6s;}
+.draw-path.delay-3{transition-delay:.9s;}
+.steam{opacity:0;transform-origin:bottom center;animation:steamRise 4s ease-in-out infinite;animation-play-state:paused;}
+.hero.loaded .steam{animation-play-state:running;}
+.steam-2{animation-delay:1.3s;}
+@keyframes steamRise{
+  0%{opacity:0;transform:translateY(0) scaleY(.85);}
+  25%{opacity:.55;}
+  75%{opacity:.15;}
+  100%{opacity:0;transform:translateY(-22px) scaleY(1.15);}
+}
+
+.scroll-cue{
+  display:none;
+  max-width:1180px;margin-inline:auto;padding-inline:56px;
+  align-items:center;gap:10px;margin-top:52px;
+  font-family:var(--font-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);
+}
+html.lang-ar .scroll-cue{font-family:var(--font-body-ar);text-transform:none;letter-spacing:0;}
+@media(min-width:900px){.scroll-cue{display:flex;}}
+.scroll-line{width:1px;height:38px;background:var(--line);position:relative;overflow:hidden;}
+.scroll-line i{position:absolute;top:-100%;left:0;width:100%;height:100%;background:var(--sienna);animation:scrollDrip 2.2s infinite;}
+@keyframes scrollDrip{0%{top:-100%;}60%{top:100%;}100%{top:100%;}}
+
+/* ============ STORY ============ */
+.story{padding-block:80px;}
+.story .wrap{
+  display:flex;flex-direction:column;gap:44px;align-items:center;
+}
+@media(min-width:900px){.story .wrap{flex-direction:row;gap:72px;}}
+.story-art{
+  position:relative;flex:0 0 auto;width:100%;max-width:360px;aspect-ratio:1;border-radius:4px;overflow:hidden;
+  border:1px solid var(--line);
+}
+.story-art svg{width:100%;height:100%;color:var(--sienna);}
+.story-tag{
+  position:absolute;inset-inline-start:16px;bottom:16px;
+  background:var(--chalk);border:1px solid var(--ink);
+  padding:8px 14px;font-family:var(--font-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;
+}
+html.lang-ar .story-tag{font-family:var(--font-body-ar);letter-spacing:0;text-transform:none;font-size:13px;}
+.story-copy{flex:1;}
+.story-copy .eyebrow{display:block;margin-bottom:14px;}
+.story-copy h2{font-size:32px;margin-bottom:22px;}
+@media(min-width:640px){.story-copy h2{font-size:40px;}}
+.story-copy p{margin-bottom:16px;max-width:52ch;}
+.story-marks{display:flex;gap:18px;margin-top:28px;color:var(--bottle);}
+.story-marks svg{width:26px;height:26px;}
+
+/* ============ SHELF ============ */
+.shelf{padding-block:80px;background:var(--linen);}
+.shelf-head{
+  display:flex;flex-direction:column;gap:16px;margin-bottom:48px;
+}
+@media(min-width:700px){.shelf-head{flex-direction:row;justify-content:space-between;align-items:flex-end;}}
+.shelf-head h2{font-size:34px;}
+@media(min-width:640px){.shelf-head h2{font-size:42px;}}
+.shelf-head p{max-width:38ch;}
+
+.shelf-grid{
+  display:grid;grid-template-columns:1fr;gap:22px;
+}
+@media(min-width:760px){.shelf-grid{grid-template-columns:repeat(12,1fr);}}
+.product{
+  background:var(--chalk);border:1px solid var(--line);border-radius:4px;
+  padding:32px;display:flex;flex-direction:column;
+  transition:transform .35s var(--ease), box-shadow .35s var(--ease);
+}
+.product:hover{transform:translateY(-6px);box-shadow:0 18px 30px -18px rgba(35,31,23,.35);}
+.product-featured{grid-column:span 12;}
+@media(min-width:760px){
+  .product-featured{grid-column:span 7;flex-direction:row;align-items:center;gap:36px;}
+  .product-side{grid-column:span 5;}
+}
+.product-icon{
+  width:56px;height:56px;color:var(--sienna);margin-bottom:18px;flex-shrink:0;
+}
+.product-featured .product-icon{width:76px;height:76px;margin-bottom:0;}
+.product-body{flex:1;}
+.product-tag{display:block;margin-bottom:10px;}
+.product h3{font-size:24px;margin-bottom:10px;}
+.product-featured h3{font-size:30px;}
+.product p{margin-bottom:14px;font-size:14.5px;}
+.product .ingredients{margin-bottom:20px;}
+.product .btn{margin-top:auto;}
+
+/* ============ PROCESS ============ */
+.process{padding-block:84px;}
+.process-head{text-align:center;max-width:520px;margin-inline:auto;margin-bottom:60px;}
+.process-head .eyebrow{display:block;margin-bottom:14px;}
+.process-head h2{font-size:34px;margin-bottom:14px;}
+@media(min-width:640px){.process-head h2{font-size:42px;}}
+.process-steps{
+  display:grid;grid-template-columns:1fr;gap:44px;position:relative;
+}
+@media(min-width:760px){
+  .process-steps{grid-template-columns:repeat(3,1fr);gap:32px;}
+  .process-steps::before{
+    content:"";position:absolute;top:38px;inset-inline:8%;height:1px;background:var(--line);z-index:0;
+  }
+}
+.step{text-align:center;position:relative;z-index:1;}
+.step-mark{
+  width:76px;height:76px;margin-inline:auto;margin-bottom:22px;position:relative;
+  display:flex;align-items:center;justify-content:center;
+  background:var(--chalk);border:1px solid var(--brass);border-radius:50%;
+}
+.step-mark svg{position:absolute;inset:0;width:100%;height:100%;color:var(--linen);}
+.step-mark span{position:relative;z-index:1;font-family:var(--font-mono);font-size:18px;color:var(--brass);}
+html.lang-ar .step-mark span{font-family:var(--font-body-ar);}
+.step h3{font-size:21px;margin-bottom:10px;}
+.step p{font-size:14.5px;max-width:30ch;margin-inline:auto;}
+
+/* ============ RITUAL / SUBSCRIPTION ============ */
+.ritual{padding-block:88px;background:var(--bottle);color:var(--chalk);position:relative;overflow:hidden;}
+.ritual::before{
+  content:"";position:absolute;inset:0;opacity:.05;
+  background-image:radial-gradient(circle at 20% 20%, var(--chalk) 1px, transparent 1px);
+  background-size:26px 26px;
+}
+.ritual .wrap{position:relative;display:flex;flex-direction:column;gap:52px;align-items:center;}
+@media(min-width:900px){.ritual .wrap{flex-direction:row;gap:72px;}}
+.ritual-copy{flex:1;}
+.ritual-copy .eyebrow{color:var(--linen);display:block;margin-bottom:14px;}
+.ritual-copy h2{font-size:32px;margin-bottom:18px;}
+@media(min-width:640px){.ritual-copy h2{font-size:40px;}}
+.ritual-copy p{color:rgba(244,238,223,.78);max-width:46ch;margin-bottom:26px;}
+.ritual-list{margin-bottom:32px;display:flex;flex-direction:column;gap:12px;}
+.ritual-list li{display:flex;align-items:center;gap:12px;font-size:15px;}
+.ritual-list svg{width:16px;height:16px;color:var(--brass);flex-shrink:0;}
+
+.unbox{position:relative;flex:0 0 auto;width:280px;max-width:100%;aspect-ratio:1;display:flex;align-items:flex-end;justify-content:center;}
+.unbox-shadow{position:absolute;bottom:18px;inset-inline:20%;height:22px;background:rgba(0,0,0,.35);filter:blur(14px);border-radius:50%;transition:transform .5s var(--ease);}
+.unbox:hover .unbox-shadow{transform:scaleX(1.15);}
+.unbox-base{
+  position:absolute;bottom:40px;inset-inline:10%;height:150px;background:var(--bottle-light);
+  border:1px solid rgba(244,238,223,.15);border-bottom:none;border-radius:0 0 6px 6px;
+  display:flex;align-items:center;justify-content:center;overflow:hidden;
+}
+.unbox-base span{font-family:var(--font-display-en);font-size:52px;color:rgba(244,238,223,.12);transform:rotate(8deg);}
+.unbox-lid{
+  position:absolute;bottom:190px;inset-inline:8%;height:56px;background:var(--chalk);
+  border:1px solid var(--line);border-radius:6px 6px 0 0;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+  transform-origin:top;transition:transform .6s cubic-bezier(.34,1.4,.64,1);z-index:3;
+  box-shadow:0 10px 18px -8px rgba(0,0,0,.4);
+}
+.unbox:hover .unbox-lid{transform:translateY(-36px) rotateX(20deg);}
+.unbox-lid b{font-family:var(--font-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-soft);}
+.unbox-lid em{font-family:var(--font-display-en);font-style:normal;font-size:15px;color:var(--ink);}
+.unbox-card{
+  position:absolute;bottom:130px;inset-inline:16%;width:68%;
+  background:var(--chalk);color:var(--ink);padding:14px 16px;
+  border:1px solid var(--line);transform:translateY(16px) rotate(-2deg);
+  opacity:0;transition:opacity .5s var(--ease) .1s, transform .5s var(--ease) .1s;
+  z-index:2;box-shadow:0 14px 24px -10px rgba(0,0,0,.35);
+}
+.unbox:hover .unbox-card{opacity:1;transform:translateY(-24px) rotate(-2deg);}
+.unbox-card p{font-family:'Aref Ruqaa','Fraunces',serif;font-style:italic;font-size:14px;color:var(--sienna);margin-bottom:6px;}
+.unbox-card span{font-family:var(--font-mono);font-size:9.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft);}
+
+/* ============ VOICES (marquee) ============ */
+.voices{padding-block:70px;overflow:hidden;border-block:1px solid var(--line);}
+.voices-head{text-align:center;margin-bottom:40px;}
+.voices-head .eyebrow{display:block;margin-bottom:10px;}
+.voices-track{display:flex;gap:26px;width:max-content;animation:marquee 38s linear infinite;}
+.voices:hover .voices-track{animation-play-state:paused;}
+@keyframes marquee{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+.voice-card{
+  width:320px;flex-shrink:0;background:var(--chalk);border:1px solid var(--line);border-radius:4px;padding:26px;
+}
+.voice-card p{color:var(--ink);font-size:15px;margin-bottom:16px;}
+.voice-meta{display:flex;align-items:center;gap:8px;}
+.voice-meta svg{width:14px;height:14px;color:var(--sienna);}
+.voice-meta span{font-family:var(--font-mono);font-size:12px;letter-spacing:.04em;color:var(--ink-soft);}
+html.lang-ar .voice-meta span{font-family:var(--font-body-ar);}
+
+/* ============ NEWSLETTER ============ */
+.newsletter{padding-block:90px;}
+.newsletter .wrap{max-width:640px;text-align:center;}
+.newsletter .eyebrow{display:block;margin-bottom:16px;}
+.newsletter h2{font-size:32px;margin-bottom:16px;}
+@media(min-width:640px){.newsletter h2{font-size:40px;}}
+.newsletter p{margin-bottom:32px;}
+.newsletter form{display:flex;flex-direction:column;gap:12px;max-width:460px;margin-inline:auto;}
+@media(min-width:520px){.newsletter form{flex-direction:row;}}
+.newsletter input{
+  flex:1;padding:15px 18px;background:transparent;border:1px solid var(--ink);border-radius:3px;
+  font-family:var(--font-mono);font-size:14px;color:var(--ink);
+}
+html.lang-ar .newsletter input{font-family:var(--font-body-ar);}
+.newsletter input::placeholder{color:var(--ink-soft);}
+.status-msg{margin-top:16px;font-size:13.5px;font-family:var(--font-mono);}
+html.lang-ar .status-msg{font-family:var(--font-body-ar);}
+.status-msg.success{color:var(--bottle);}
+.status-msg.error{color:var(--sienna);}
+
+/* ============ FOOTER ============ */
+footer{background:var(--ink);color:rgba(244,238,223,.72);padding-block:64px 28px;}
+.footer-grid{display:grid;grid-template-columns:1fr;gap:40px;margin-bottom:48px;}
+@media(min-width:700px){.footer-grid{grid-template-columns:1.4fr repeat(3,1fr);}}
+.footer-brand{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.footer-brand svg{width:22px;height:22px;color:var(--brass);}
+.footer-brand span{font-family:var(--font-display-en);font-size:20px;color:var(--chalk);}
+.footer-grid h5{
+  font-family:var(--font-mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;
+  color:var(--brass);margin-bottom:16px;
+}
+html.lang-ar .footer-grid h5{font-family:var(--font-body-ar);letter-spacing:0;text-transform:none;font-size:14px;}
+.footer-grid ul{display:flex;flex-direction:column;gap:10px;}
+.footer-grid a{text-decoration:none;font-size:14px;transition:color .2s var(--ease);}
+.footer-grid a:hover{color:var(--chalk);}
+.footer-bottom{
+  border-top:1px solid rgba(244,238,223,.14);padding-top:24px;
+  display:flex;flex-direction:column;gap:10px;align-items:center;text-align:center;
+  font-family:var(--font-mono);font-size:12px;color:rgba(244,238,223,.5);
+}
+html.lang-ar .footer-bottom{font-family:var(--font-body-ar);}
+@media(min-width:640px){.footer-bottom{flex-direction:row;justify-content:space-between;text-align:initial;}}
+
+/* ============ INSERTED PHOTOGRAPHY (added) ============ */
+.story-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;}
+.story-accent{
+  position:absolute;top:14px;inset-inline-end:14px;z-index:2;
+  width:32%;aspect-ratio:1;object-fit:cover;border-radius:3px;
+  border:3px solid var(--chalk);box-shadow:0 10px 22px -10px rgba(35,31,23,.5);
+}
+.product-photo{
+  display:block;width:100%;aspect-ratio:4/3;object-fit:cover;
+  border-radius:3px;border:1px solid var(--line);margin-block:16px;
+}
+.ritual-photo{
+  display:block;width:100%;max-width:380px;aspect-ratio:4/3;object-fit:cover;
+  border-radius:4px;margin-block:26px;
+  box-shadow:0 24px 44px -22px rgba(0,0,0,.5);
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{
+    animation-duration:.001ms !important;
+    animation-iteration-count:1 !important;
+    transition-duration:.001ms !important;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- shared SVG symbols -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="star8" viewBox="0 0 100 100">
+    <g fill="none" stroke="currentColor" stroke-width="4">
+      <rect x="20" y="20" width="60" height="60"/>
+      <rect x="20" y="20" width="60" height="60" transform="rotate(45 50 50)"/>
+    </g>
+  </symbol>
+  <symbol id="icon-chamomile" viewBox="0 0 60 60">
+    <g fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="30" cy="30" r="6"/>
+      <ellipse cx="30" cy="12" rx="5" ry="10"/>
+      <ellipse cx="30" cy="48" rx="5" ry="10"/>
+      <ellipse cx="12" cy="30" rx="10" ry="5"/>
+      <ellipse cx="48" cy="30" rx="10" ry="5"/>
+      <ellipse cx="17" cy="17" rx="5" ry="10" transform="rotate(45 17 17)"/>
+      <ellipse cx="43" cy="43" rx="5" ry="10" transform="rotate(45 43 43)"/>
+      <ellipse cx="43" cy="17" rx="5" ry="10" transform="rotate(-45 43 17)"/>
+      <ellipse cx="17" cy="43" rx="5" ry="10" transform="rotate(-45 17 43)"/>
+    </g>
+  </symbol>
+  <symbol id="icon-ginger" viewBox="0 0 60 60">
+    <path fill="none" stroke="currentColor" stroke-width="2" d="M30 9 C43 9 49 20 47 30 C45 41 34 45 30 51 C26 45 15 41 13 30 C11 20 17 9 30 9 Z M21 21 C26 26 34 26 39 21 M19 32 C26 37 34 37 41 32"/>
+  </symbol>
+  <symbol id="icon-anise" viewBox="0 0 60 60">
+    <g stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+      <line x1="30" y1="7" x2="30" y2="53"/>
+      <line x1="8" y1="18" x2="52" y2="42"/>
+      <line x1="8" y1="42" x2="52" y2="18"/>
+    </g>
+    <circle cx="30" cy="30" r="4" fill="currentColor"/>
+  </symbol>
+  <symbol id="icon-check" viewBox="0 0 24 24">
+    <path fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" d="M4 12 L10 18 L20 6"/>
+  </symbol>
+</svg>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a href="#top" class="brand">
+      <svg class="brand-mark" viewBox="0 0 100 100"><use href="#star8"/></svg>
+      <span class="brand-name">Teryaq</span>
+      <span class="brand-name-ar" data-lang="ar">ترياق</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#story"><span data-lang="en">Heritage</span><span data-lang="ar">التراث</span></a></li>
+      <li><a href="#collections"><span data-lang="en">Collections</span><span data-lang="ar">المجموعة</span></a></li>
+      <li><a href="#process"><span data-lang="en">Craft</span><span data-lang="ar">الصنعة</span></a></li>
+      <li><a href="#voices"><span data-lang="en">Voices</span><span data-lang="ar">الآراء</span></a></li>
+    </ul>
+    <div class="nav-actions">
+      <div class="lang-switch" data-active="en">
+        <button type="button" data-lang-btn="en" aria-pressed="true">EN</button>
+        <button type="button" data-lang-btn="ar" aria-pressed="false">ع</button>
+      </div>
+      <a class="btn btn-primary" href="#collections">
+        <span data-lang="en">Shop Now</span><span data-lang="ar">تسوّق الآن</span>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="hero-inner">
+    <div class="hero-copy">
+      <span class="eyebrow">
+        <span data-lang="en">Apothecary of the Atlas</span>
+        <span data-lang="ar">عطّارة جبال الأطلس</span>
+      </span>
+      <h1 class="h-display">
+        <span data-lang="en">Her remedies.<br>Our ritual.</span>
+        <span data-lang="ar">وصفاتُها.<br>طقسنا اليوم.</span>
+      </h1>
+      <p class="hero-sub">
+        <span data-lang="en">Grandmother's recipes, precision-crafted for how we actually live now — no shortcuts, no filler.</span>
+        <span data-lang="ar">وصفات الجدّة، بحرفية تلائم حياتنا كما هي فعلاً — بلا اختصارات ولا حشو.</span>
+      </p>
+      <div class="hero-actions">
+        <a href="#collections" class="btn btn-primary">
+          <span data-lang="en">Explore the Collection</span><span data-lang="ar">اكتشف المجموعة</span>
+        </a>
+        <a href="#story" class="btn btn-ghost">
+          <span data-lang="en">Our Story</span><span data-lang="ar">حكايتنا</span>
+        </a>
+      </div>
+    </div>
+    <div class="hero-art" aria-hidden="true">
+      <svg class="ornament-spin" viewBox="0 0 100 100"><use href="#star8"/></svg>
+      <svg class="teapot" viewBox="0 0 320 260" fill="none">
+        <path class="draw-path" pathLength="1" stroke="var(--brass)" stroke-width="2.5" d="M70 150 C70 110 100 90 160 90 C220 90 250 110 250 150 C250 195 210 225 160 225 C110 225 70 195 70 150 Z"/>
+        <path class="draw-path delay-1" pathLength="1" stroke="var(--brass)" stroke-width="2.5" d="M130 90 C130 78 145 70 160 70 C175 70 190 78 190 90"/>
+        <circle class="draw-path delay-1" pathLength="1" cx="160" cy="64" r="6" stroke="var(--brass)" stroke-width="2.5"/>
+        <path class="draw-path delay-2" pathLength="1" stroke="var(--sienna)" stroke-width="2.5" d="M70 140 C40 135 20 120 12 95 C10 90 14 86 18 90 C30 108 50 118 74 122"/>
+        <path class="draw-path delay-2" pathLength="1" stroke="var(--brass)" stroke-width="2.5" d="M248 130 C280 130 296 150 296 170 C296 190 280 205 252 200"/>
+        <path class="draw-path delay-3" pathLength="1" stroke="var(--brass)" stroke-width="2.5" d="M108 225 L212 225 L200 240 L120 240 Z"/>
+        <path class="steam steam-1" stroke="var(--sienna)" stroke-width="2" stroke-linecap="round" d="M20 85 C10 70 30 60 20 45 C10 30 30 20 22 8"/>
+        <path class="steam steam-2" stroke="var(--sienna)" stroke-width="2" stroke-linecap="round" d="M35 88 C25 73 45 63 35 48 C25 33 45 23 37 11"/>
+      </svg>
+    </div>
+  </div>
+  <div class="scroll-cue">
+    <span data-lang="en">Scroll</span><span data-lang="ar">مرّر للأسفل</span>
+    <div class="scroll-line"><i></i></div>
+  </div>
+</header>
+
+<section class="story reveal" id="story">
+  <div class="wrap">
+    <div class="story-art">
+      <img class="story-photo" src="images/atlas-zellige-tiles.jpg" alt="Hand-cut zellige tile fragments in bottle green and sienna terracotta">
+      <svg viewBox="0 0 400 400" preserveAspectRatio="xMidYMid slice">
+        <defs>
+          <pattern id="tile" width="60" height="60" patternUnits="userSpaceOnUse">
+            <use href="#star8" width="60" height="60" opacity=".55"/>
+          </pattern>
+        </defs>
+        <rect width="400" height="400" fill="url(#tile)"/>
+      </svg>
+      <img class="story-accent" src="images/ceramic-jar.jpg" alt="Hand-glazed terracotta and green ceramic storage jar">
+      <span class="story-tag">
+        <span data-lang="en">Handpicked · High Atlas</span>
+        <span data-lang="ar">قُطف يدويًا · الأطلس الكبير</span>
+      </span>
+    </div>
+    <div class="story-copy">
+      <span class="eyebrow">
+        <span data-lang="en">Our Narrative</span><span data-lang="ar">حكايتنا</span>
+      </span>
+      <h2 class="h-display">
+        <span data-lang="en">Where the mountain meets the kettle</span>
+        <span data-lang="ar">حيث يلتقي الجبل بالإبريق</span>
+      </h2>
+      <p>
+        <span data-lang="en">Long before pharmacies, there were grandmothers who knew which leaf eased a fever and which root settled a restless stomach. Teryaq keeps that knowledge alive.</span>
+        <span data-lang="ar">قبل أن توجد الصيدليات، كانت هناك جدّات يعرفن أي ورقة تهدّئ الحمّى وأي جذر يريح المعدة المضطربة. ترياق يحافظ على هذه المعرفة حيّة.</span>
+      </p>
+      <p>
+        <span data-lang="en">We work with small cooperatives across the Atlas and the Rif, paying fair prices for herbs picked in the exact week they're most potent.</span>
+        <span data-lang="ar">نعمل مع تعاونيات صغيرة في الأطلس والريف، وندفع أسعارًا عادلة مقابل أعشاب تُقطف في الأسبوع الأنسب لقوّتها.</span>
+      </p>
+      <p>
+        <span data-lang="en">No shortcuts, no fillers — just what your grandmother would recognize, packaged for the life you actually lead.</span>
+        <span data-lang="ar">بلا اختصارات ولا حشو — فقط ما كانت جدّتك لتتعرّف عليه، مُعبّأ لحياتك كما هي فعلًا.</span>
+      </p>
+      <div class="story-marks">
+        <svg viewBox="0 0 60 60"><use href="#icon-chamomile"/></svg>
+        <svg viewBox="0 0 60 60"><use href="#icon-ginger"/></svg>
+        <svg viewBox="0 0 60 60"><use href="#icon-anise"/></svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="shelf" id="collections">
+  <div class="wrap">
+    <div class="shelf-head reveal">
+      <div>
+        <span class="eyebrow" style="display:block;margin-bottom:14px;">
+          <span data-lang="en">The Apothecary Shelf</span><span data-lang="ar">رفّ العطّارة</span>
+        </span>
+        <h2 class="h-display">
+          <span data-lang="en">Blends for how the day moves</span>
+          <span data-lang="ar">مزيجات تواكب إيقاع يومك</span>
+        </h2>
+      </div>
+      <p>
+        <span data-lang="en">Small batches. Real ingredients. Nothing you can't pronounce.</span>
+        <span data-lang="ar">دفعات صغيرة. مكوّنات حقيقية. لا شيء يصعب نطقه.</span>
+      </p>
+    </div>
+
+    <div class="shelf-grid">
+      <article class="product product-featured reveal">
+        <svg class="product-icon" viewBox="0 0 60 60"><use href="#icon-chamomile"/></svg>
+        <div class="product-body">
+          <span class="product-tag label"><span data-lang="en">Restorative</span><span data-lang="ar">مُريح</span></span>
+          <h3 class="h-display"><span data-lang="en">Calm Nights</span><span data-lang="ar">ليالٍ هادئة</span></h3>
+          <img class="product-photo" src="images/lavender-chamomile.jpg" alt="Dried lavender, chamomile, and wildflowers used in the Calm Nights blend">
+          <p><span data-lang="en">Chamomile, orange blossom, and wild lavender — for a mind that won't switch off.</span><span data-lang="ar">بابونج وزهر البرتقال والخزامى البرّي — لعقلٍ لا يهدأ.</span></p>
+          <span class="ingredients">chamomile · orange blossom · lavender</span>
+          <button class="btn btn-outline"><span data-lang="en">Add to Ritual</span><span data-lang="ar">أضف إلى طقسك</span></button>
+        </div>
+      </article>
+
+      <article class="product product-side reveal">
+        <svg class="product-icon" viewBox="0 0 60 60"><use href="#icon-ginger"/></svg>
+        <span class="product-tag label"><span data-lang="en">Vitality</span><span data-lang="ar">حيوية</span></span>
+        <h3 class="h-display"><span data-lang="en">Morning Lift</span><span data-lang="ar">صحوة الصباح</span></h3>
+        <img class="product-photo" src="images/ginger-cinnamon-mint.jpg" alt="Sliced ginger, cinnamon sticks, and fresh mint used in the Morning Lift blend">
+        <p><span data-lang="en">Zesty ginger, warm cinnamon, and fresh mint to wake the senses naturally.</span><span data-lang="ar">زنجبيل منعش وقرفة دافئة ونعناع طازج توقظ حواسّك بشكل طبيعي.</span></p>
+        <span class="ingredients">ginger · cinnamon · mint</span>
+        <button class="btn btn-outline"><span data-lang="en">Add to Ritual</span><span data-lang="ar">أضف إلى طقسك</span></button>
+      </article>
+
+      <article class="product product-side reveal">
+        <svg class="product-icon" viewBox="0 0 60 60"><use href="#icon-anise"/></svg>
+        <span class="product-tag label"><span data-lang="en">Comfort</span><span data-lang="ar">راحة</span></span>
+        <h3 class="h-display"><span data-lang="en">Easy Ease</span><span data-lang="ar">راحة المعدة</span></h3>
+        <img class="product-photo" src="images/anise-cumin-bowl.jpg" alt="A bowl of green anise and cumin seeds used in the Easy Ease blend">
+        <p><span data-lang="en">Green anise and dried cumin, the after-dinner glass your grandmother poured without asking.</span><span data-lang="ar">يانسون أخضر وكمّون مجفّف — كأس ما بعد العشاء الذي كانت جدّتك تصبّه دون أن تسأل.</span></p>
+        <span class="ingredients">anise · cumin</span>
+        <button class="btn btn-outline"><span data-lang="en">Add to Ritual</span><span data-lang="ar">أضف إلى طقسك</span></button>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="process" id="process">
+  <div class="wrap">
+    <div class="process-head reveal">
+      <span class="eyebrow" style="display:block;">
+        <span data-lang="en">The Craft</span><span data-lang="ar">الصنعة</span>
+      </span>
+      <h2 class="h-display">
+        <span data-lang="en">Patience, mostly</span>
+        <span data-lang="ar">الصبر، في الغالب</span>
+      </h2>
+      <p><span data-lang="en">From the peaks of the Atlas to your porcelain cup.</span><span data-lang="ar">من قمم الأطلس إلى فنجانك.</span></p>
+    </div>
+    <div class="process-steps">
+      <div class="step reveal">
+        <div class="step-mark"><svg viewBox="0 0 100 100"><use href="#star8"/></svg><span><span data-lang="en">01</span><span data-lang="ar">٠١</span></span></div>
+        <h3><span data-lang="en">Fair Harvest</span><span data-lang="ar">حصاد عادل</span></h3>
+        <p><span data-lang="en">We partner with cooperatives in the High Atlas, paying fair prices for wild-harvested herbs.</span><span data-lang="ar">نتعاون مع تعاونيات في الأطلس الكبير، وندفع أسعارًا عادلة مقابل أعشاب برّية.</span></p>
+      </div>
+      <div class="step reveal" style="transition-delay:120ms">
+        <div class="step-mark"><svg viewBox="0 0 100 100"><use href="#star8"/></svg><span><span data-lang="en">02</span><span data-lang="ar">٠٢</span></span></div>
+        <h3><span data-lang="en">Shade-Dried</span><span data-lang="ar">مجفَّف في الظل</span></h3>
+        <p><span data-lang="en">No industrial ovens. Herbs dry slowly in the shade to keep their essential oils intact.</span><span data-lang="ar">بلا أفران صناعية. تُجفَّف الأعشاب ببطء في الظل للحفاظ على زيوتها الأساسية.</span></p>
+      </div>
+      <div class="step reveal" style="transition-delay:240ms">
+        <div class="step-mark"><svg viewBox="0 0 100 100"><use href="#star8"/></svg><span><span data-lang="en">03</span><span data-lang="ar">٠٣</span></span></div>
+        <h3><span data-lang="en">Hand-Blended</span><span data-lang="ar">مزيج يدوي</span></h3>
+        <p><span data-lang="en">Every batch is mixed by hand in Casablanca, to the exact ratios of a grandmother's recipe.</span><span data-lang="ar">كل دفعة تُخلط يدويًا في الدار البيضاء، بالمقادير الدقيقة لوصفة جدّة.</span></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="ritual">
+  <div class="wrap">
+    <div class="ritual-copy reveal">
+      <span class="eyebrow"><span data-lang="en">The Monthly Ritual</span><span data-lang="ar">الطقس الشهري</span></span>
+      <h2 class="h-display on-dark">
+        <span data-lang="en">A small parcel from the mountain, every month</span>
+        <span data-lang="ar">طرد صغير من الجبل، كل شهر</span>
+      </h2>
+      <p><span data-lang="en">A curated blend, a story card about its origin, and a note on when to drink it. No two months alike.</span><span data-lang="ar">مزيج مُنتقى، وبطاقة تروي أصله، وملاحظة عن أفضل وقت لشربه. لا شهر يشبه الآخر.</span></p>
+      <img class="ritual-photo" src="images/ritual-box-tin.jpg" alt="The Ritual Box: a cedar box with a herbal tea tin and a heritage story card">
+      <ul class="ritual-list">
+        <li><svg viewBox="0 0 24 24"><use href="#icon-check"/></svg><span><span data-lang="en">Exclusive seasonal blends</span><span data-lang="ar">مزيجات موسمية حصرية</span></span></li>
+        <li><svg viewBox="0 0 24 24"><use href="#icon-check"/></svg><span><span data-lang="en">Heritage storytelling card</span><span data-lang="ar">بطاقة حكاية تراثية</span></span></li>
+        <li><svg viewBox="0 0 24 24"><use href="#icon-check"/></svg><span><span data-lang="en">Free carbon-neutral shipping</span><span data-lang="ar">شحن مجاني محايد الكربون</span></span></li>
+      </ul>
+      <a href="#" class="btn btn-light"><span data-lang="en">Start My Ritual — $24/mo</span><span data-lang="ar">ابدأ طقسي — 24$ شهريًا</span></a>
+    </div>
+    <div class="unbox reveal" aria-hidden="true">
+      <div class="unbox-shadow"></div>
+      <div class="unbox-base"><span>ترياق</span></div>
+      <div class="unbox-card">
+        <p><span data-lang="en">"The wind from the Atlas carries whispers of the sun."</span><span data-lang="ar">"ريح الأطلس تحمل همس الشمس."</span></p>
+        <span>Imlil Valley · Batch #042</span>
+      </div>
+      <div class="unbox-lid">
+        <b><span data-lang="en">The Ritual Box</span><span data-lang="ar">صندوق الطقس</span></b>
+        <em>ترياق</em>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="voices" id="voices">
+  <div class="voices-head reveal">
+    <span class="eyebrow" style="display:block;"><span data-lang="en">In Their Words</span><span data-lang="ar">بكلماتهم</span></span>
+    <h2 class="h-display" style="font-size:30px;">
+      <span data-lang="en">Small notes from the circle</span>
+      <span data-lang="ar">ملاحظات من الدائرة</span>
+    </h2>
+  </div>
+  <div class="voices-track" id="voices-track">
+    <!-- duplicated via JS for seamless loop -->
+    <div class="voice-card"><p><span data-lang="en">"Calm Nights is my non-negotiable evening ritual — it tastes like a warm hug."</span><span data-lang="ar">"ليالٍ هادئة أصبح طقسي المسائي الذي لا أتنازل عنه — طعمها كحضن دافئ."</span></p><div class="voice-meta"><svg viewBox="0 0 100 100"><use href="#star8"/></svg><span>Sarah L. · London</span></div></div>
+    <div class="voice-card"><p><span data-lang="en">"Finally, herbal wisdom that values craft as much as effect. The tins alone are worth it."</span><span data-lang="ar">"أخيرًا، حكمة عشبية تقدّر الحرفية بقدر المفعول. العلب وحدها تستحق الثمن."</span></p><div class="voice-meta"><svg viewBox="0 0 100 100"><use href="#star8"/></svg><span>Omar K. · Dubai</span></div></div>
+    <div class="voice-card"><p><span data-lang="en">"Morning Lift gives a steady lift without the caffeine crash. You can taste the sourcing."</span><span data-lang="ar">"صحوة الصباح تمنحني طاقة ثابتة بلا انهيار الكافيين. تشعر بجودة المصدر في كل رشفة."</span></p><div class="voice-meta"><svg viewBox="0 0 100 100"><use href="#star8"/></svg><span>Elena R. · Paris</span></div></div>
+    <div class="voice-card"><p><span data-lang="en">"The story card with Easy Ease made me call my own grandmother. That's the whole brand, really."</span><span data-lang="ar">"بطاقة الحكاية مع راحة المعدة جعلتني أتصل بجدّتي. هذه هي العلامة التجارية باختصار."</span></p><div class="voice-meta"><svg viewBox="0 0 100 100"><use href="#star8"/></svg><span>Yasmine B. · Casablanca</span></div></div>
+  </div>
+</section>
+
+<section class="newsletter">
+  <div class="wrap reveal">
+    <span class="eyebrow" style="display:block;"><span data-lang="en">Stay Near the Source</span><span data-lang="ar">ابقَ قريبًا من المصدر</span></span>
+    <h2 class="h-display">
+      <span data-lang="en">Join the Circle</span>
+      <span data-lang="ar">انضم إلى الدائرة</span>
+    </h2>
+    <p><span data-lang="en">Harvest notes, heritage recipes, and early access to rare batches. No spam, only wisdom.</span><span data-lang="ar">ملاحظات الحصاد، وصفات تراثية، ووصول مبكر للدفعات النادرة. بلا إزعاج، فقط حكمة.</span></p>
+    <form id="newsletter-form">
+      <input type="email" id="newsletter-email" required>
+      <button type="submit" class="btn btn-primary" style="justify-content:center;">
+        <span data-lang="en">Sign Up</span><span data-lang="ar">اشترك</span>
+      </button>
+    </form>
+    <div id="newsletter-status"></div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">
+          <svg viewBox="0 0 100 100"><use href="#star8"/></svg>
+          <span>Teryaq</span>
+        </div>
+        <p style="max-width:34ch;font-size:14px;"><span data-lang="en">Rooted in Maghrebi wisdom. Hand-blended for the contemporary soul.</span><span data-lang="ar">متجذّر في الحكمة المغاربية. يُخلط يدويًا للروح المعاصرة.</span></p>
+      </div>
+      <div>
+        <h5><span data-lang="en">Shop</span><span data-lang="ar">تسوّق</span></h5>
+        <ul>
+          <li><a href="#collections"><span data-lang="en">Collections</span><span data-lang="ar">المجموعة</span></a></li>
+          <li><a href="#"><span data-lang="en">Subscription</span><span data-lang="ar">الاشتراك</span></a></li>
+          <li><a href="#"><span data-lang="en">Wholesale</span><span data-lang="ar">بيع الجملة</span></a></li>
+        </ul>
+      </div>
+      <div>
+        <h5><span data-lang="en">The Ritual</span><span data-lang="ar">الطقس</span></h5>
+        <ul>
+          <li><a href="#"><span data-lang="en">Brewing Guide</span><span data-lang="ar">دليل التحضير</span></a></li>
+          <li><a href="#story"><span data-lang="en">Our Sourcing</span><span data-lang="ar">مصادرنا</span></a></li>
+          <li><a href="#process"><span data-lang="en">The Craft</span><span data-lang="ar">الصنعة</span></a></li>
+        </ul>
+      </div>
+      <div>
+        <h5><span data-lang="en">Connect</span><span data-lang="ar">تواصل</span></h5>
+        <ul>
+          <li><a href="#"><span data-lang="en">Contact Us</span><span data-lang="ar">اتصل بنا</span></a></li>
+          <li><a href="#"><span data-lang="en">Shipping &amp; Returns</span><span data-lang="ar">الشحن والإرجاع</span></a></li>
+          <li><a href="#"><span data-lang="en">Privacy Policy</span><span data-lang="ar">سياسة الخصوصية</span></a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span><span data-lang="en">© 2024 Teryaq. Rooted in Maghrebi Wisdom.</span><span data-lang="ar">© 2024 ترياق. متجذّر في الحكمة المغاربية.</span></span>
+      <span><span data-lang="en">Casablanca · Marrakech · Fes</span><span data-lang="ar">الدار البيضاء · مراكش · فاس</span></span>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function(){
+  const root = document.documentElement;
+  const langSwitch = document.querySelector('.lang-switch');
+
+  function setLanguage(lang){
+    const isAr = lang === 'ar';
+    root.lang = isAr ? 'ar' : 'en';
+    root.classList.toggle('lang-ar', isAr);
+    langSwitch.dataset.active = lang;
+    langSwitch.querySelectorAll('[data-lang-btn]').forEach(b=>{
+      b.setAttribute('aria-pressed', b.dataset.langBtn === lang ? 'true' : 'false');
+    });
+  }
+  langSwitch.addEventListener('click', (e)=>{
+    const btn = e.target.closest('[data-lang-btn]');
+    if(!btn) return;
+    setLanguage(btn.dataset.langBtn);
+  });
+
+  // Hero load sequence
+  window.addEventListener('load', ()=>{
+    const hero = document.querySelector('.hero');
+    setTimeout(()=> hero.classList.add('loaded'), 120);
+  });
+
+  // Scroll reveal
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(entry.isIntersecting){
+        entry.target.classList.add('in-view');
+        io.unobserve(entry.target);
+      }
+    });
+  }, {threshold:.15, rootMargin:'0px 0px -60px 0px'});
+  revealEls.forEach(el=> io.observe(el));
+
+  // Marquee: duplicate track content once for seamless loop
+  const track = document.getElementById('voices-track');
+  if(track){ track.innerHTML += track.innerHTML; }
+
+  // Newsletter fake-submit
+  const form = document.getElementById('newsletter-form');
+  const status = document.getElementById('newsletter-status');
+  const emailInput = document.getElementById('newsletter-email');
+  if(form){
+    form.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      status.innerHTML = '';
+      const email = emailInput.value.trim();
+      const isAr = root.classList.contains('lang-ar');
+      if(!email.includes('@')){
+        status.innerHTML = '<div class="status-msg error">' + (isAr ? 'يرجى إدخال بريد إلكتروني صالح.' : 'Please enter a valid email.') + '</div>';
+        return;
+      }
+      const btn = form.querySelector('button');
+      btn.disabled = true;
+      setTimeout(()=>{
+        btn.disabled = false;
+        status.innerHTML = '<div class="status-msg success">' + (isAr ? 'أهلاً بك في الدائرة. أخبار الحصاد قادمة إليك.' : 'Welcome to the Circle. Harvest notes are on their way.') + '</div>';
+        form.reset();
+      }, 900);
+    });
+  }
+})();
+</script>
+</body>
+</html>
